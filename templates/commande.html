@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Passer une Commande</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Passer une Commande</h1>
+    <form method="POST">
+        <input type="text" name="nom" placeholder="Votre Nom" required>
+        <input type="text" name="adresse" placeholder="Votre Adresse" required>
+        <input type="text" name="telephone" placeholder="Votre Téléphone" required>
+        <h3>Choisissez vos plats :</h3>
+        {% for plat in menu %}
+            <input type="checkbox" name="plats" value="{{ plat.name }}"> {{ plat.name }} - {{ plat.price }}€<br>
+        {% endfor %}
+        <button type="submit">Commander</button>
+    </form>
+</body>
+</html>

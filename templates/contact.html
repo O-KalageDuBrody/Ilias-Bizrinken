@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Contactez-nous</h1>
+    <form method="POST">
+        <input type="text" name="nom" placeholder="Votre Nom" required>
+        <input type="email" name="email" placeholder="Votre Email" required>
+        <textarea name="message" placeholder="Votre Message" required></textarea>
+        <button type="submit">Envoyer</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Réserver une table</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Réserver une Table</h1>
+    <form method="POST">
+        <input type="text" name="nom" placeholder="Votre Nom" required>
+        <input type="date" name="date" required>
+        <input type="time" name="heure" required>
+        <input type="number" name="personnes" placeholder="Nombre de personnes" required>
+        <button type="submit">Réserver</button>
+    </form>
+</body>
+</html>

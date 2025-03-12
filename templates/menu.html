@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu - La Casse-Crouterie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Notre Menu</h1>
+    <ul>
+        {% for plat in menu %}
+            <li>{{ plat.name }} - {{ plat.price }}€</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
