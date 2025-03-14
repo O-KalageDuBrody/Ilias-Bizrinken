@@ -11,14 +11,42 @@
         <h1>Bienvenue à La Casse-Crouterie</h1>
         <nav>
             <a href="/">Accueil</a>
-            <a href="/menu">Menu</a>
+            <a href="/menu">A propos</a>
             <a href="/reservation">Réservation</a>
             <a href="/commande">Commande</a>
             <a href="/contact">Contact</a>
+            {% if user %}
+                <a href="/logout">Déconnexion</a>
+            {% else %}
+                <a href="/login">Connexion</a>
+                <a href="/register">Inscription</a>
+            {% endif %}
         </nav>
     </header>
     <main>
-        <p>Découvrez nos délicieux plats et réservez une table en ligne !</p>
+        {% if user %}
+            <p>Bienvenue, {{ user }} !</p>
+            <h2>Historique de vos commandes</h2>
+            {% if orders %}
+                <ul>
+                    {% for order in orders %}
+                        <li><a href="confirmation/{{order.id}}">Commande: {{ order.plats }} - Total: {{ order.total }}€</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucune commande passée pour le moment.</p>
+            {% endif %}
+        {% else %}
+            <p>Connectez-vous pour passer des commandes et voir votre historique.</p>
+        {% endif %}
+        <h2>Avis des clients</h2>
+        <div class="avis-container">
+            {% for avis in avis_list %}
+                <div class="avis">
+                    <p><strong>{{ avis.nom }}</strong>: {{ avis.message }}</p>
+                </div>
+            {% endfor %}
+        </div>
     </main>
 </body>
 </html>

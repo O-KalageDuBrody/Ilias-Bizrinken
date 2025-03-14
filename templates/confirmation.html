@@ -2,21 +2,26 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Confirmation</title>
+    <title>Confirmation de Commande</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Confirmation de votre commande</h1>
-    <p>Merci <strong>{{ nom }}</strong> pour votre commande !</p>
-    <p>Adresse de livraison : <strong>{{ adresse }}</strong></p>
-    <p>Numéro de téléphone : <strong>{{ telephone }}</strong></p>
-    <h3>Résumé de votre commande :</h3>
-    <ul>
-        {% for plat in plats %}
-            <li>{{ plat }}</li>
-        {% endfor %}
-    </ul>
-    <p>Total : <strong>{{ total }}€</strong></p>
-    <a href="/">Retour à l'accueil</a>
+    {% if order %}
+        <p><strong>Numéro de commande :</strong> {{ order.id }}</p>
+        <p><strong>Plats commandés :</strong></p>
+        <ul>
+            {% for plat in order.plats %}
+                <li>{{ plat }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Total :</strong> {{ order.total }} €</p>
+        <p><strong>Adresse de livraison :</strong> {{ order.adresse }}</p>
+        <p><strong>Numéro de téléphone :</strong> {{ order.telephone }}</p>
+    {% else %}
+        <p>Aucune commande trouvée.</p>
+    {% endif %}
+    <br>
+    <a href="{{ url_for('index') }}">Retour à l'accueil</a>
 </body>
 </html>
