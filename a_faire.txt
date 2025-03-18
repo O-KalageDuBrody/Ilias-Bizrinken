@@ -1,2 +1,2 @@
-faire un systeme d'inscription/connexion et qui va permettre d'avoir un historique des commandes, des réservations etc...
-faire un systeme d'avis dans le contact.html qui affiche les avis dans le index.html
+faire un systeme d'inscription/connexion et qui va permettre d'avoir un historique des commandes, des réservations etc... ✅
+faire un systeme d'avis dans le contact.html qui affiche les avis dans le index.html✅
