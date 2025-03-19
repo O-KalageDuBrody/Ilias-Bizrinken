@@ -6,8 +6,10 @@ app.secret_key = "secret_key"
 
 menu = [
     {"name": "msemen kefta", "price": 620.00},
-    {"name": "", "price": 10.00},
-    {"name": "Salade César", "price": 7.00}
+    {"name": "chawarma", "price": 507.99},
+    {"name": "coucous royale", "price": 750.00},
+    {"name": "Futu-banane", "price": 890.99},
+    {"name": "street food indienne importé des rues de Mumbaï", "price": 0.50},
 ]
 
 users = {}
