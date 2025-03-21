@@ -37,21 +37,25 @@
                 <p>Aucune commande passée pour le moment.</p>
             {% endif %}
         {% else %}
-            <p>Connectez-vous pour passer des commandes et voir votre historique.</p>
+            <p>Connectez-vous pour passer des commandes et faire des réservations</p>
         {% endif %}
 
-        <h2>Vos réservations</h2>
-        {% if reservations %}
-        <ul>
-            {% for reservation in reservations %}
-                <li>
-                    Réservation pour {{ reservation.personnes }} personnes le {{ reservation.date }} à {{ reservation.heure }} (Nom : {{ reservation.nom }})
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucune réservation pour le moment.</p>
-    {% endif %}
+        {% if user %}
+            <h2>Vos réservations</h2>
+            {% if reservations %}
+                <ul>
+                    {% for reservation in reservations %}
+                        <li>
+                            Réservation pour {{ reservation.personnes }} personnes le {{ reservation.date }} à {{ reservation.heure }} (Nom : {{ reservation.nom }})
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+            <p>Aucune réservation pour le moment.</p>
+            {% endif %}
+        {% endif %}
+
+
         <h2>Avis des clients</h2>
         <div class="avis-container">
             {% for avis in avis_list %}
