@@ -22,7 +22,8 @@ def index():
     if 'username' in session:
         user = session['username']
         user_orders = orders.get(user, [])
-        return render_template('index.html', avis_list=avis_list, user=user, orders=user_orders)
+        user_reservations = reservations.get(user, [])
+        return render_template('index.html', avis_list=avis_list, user=user, orders=user_orders, reservations=user_reservations)
     return render_template('index.html', avis_list=avis_list, user=None)
 
 @app.route('/menu')
@@ -73,8 +74,7 @@ def reservation():
         date = request.form['date']
         heure = request.form['heure']
         personnes = request.form['personnes']
-        reservation_id = len(reservation.get(username, [])) + 1
-        reservation = {"id": reservation_id, "nom": nom, "date": date, "heure": heure, "personnes": personnes}
+        reservation = {"nom": nom, "date": date, "heure": heure, "personnes": personnes}
         
         if username not in reservations:
             reservations[username] = []
