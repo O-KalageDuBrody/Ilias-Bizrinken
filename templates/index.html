@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>Bienvenue à La Casse-Crouterie</h1>
+        <h1 class="logo"><img class='pp_logo' src='static/logo.jpg'>Bienvenue à La Casse-Crouterie</h1>
         <nav>
             <a href="/">Accueil</a>
             <a href="/menu">Le Menu</a>
@@ -39,6 +39,18 @@
         {% else %}
             <p>Connectez-vous pour passer des commandes et voir votre historique.</p>
         {% endif %}
+
+        <h2>Vos Réservations</h2>
+        {% if reservation in reservations %}
+        <ul>
+            {% for reservation in reservations %}
+                <li>
+                    Réservation pour {{ reservation.personnes }} personnes le {{ reservation.date }} à {{ reservation.heure }} (Nom : {{ reservation.nom }})
+                </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
         <h2>Avis des clients</h2>
         <div class="avis-container">
             {% for avis in avis_list %}

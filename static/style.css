@@ -4,15 +4,23 @@ body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #1e1e1e;
+    background-color: #ff4500;
     color: #fff;
     text-align: center;
 }
 
 header {
-    background-color: #ff4500;
+    background-image: url('R.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pp_logo {
+    width: 75px;
+    height: 75px;
 }
 
 a {

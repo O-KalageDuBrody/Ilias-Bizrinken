@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ plat.name }} - Détails</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>{{ plat.name }}</h1>
+    <img src="{{ url_for('static', filename='detail/' + plat.name + '.jpg') }}" alt="Image de {{ plat.name }}" style="max-width: 300px; height: auto;">
+    <p>Prix : {{ plat.price }}€</p>
+    <p>Description : {{ plat.description }}</p>
+    <a href="{{ url_for('afficher_menu') }}">Retour au menu</a>
+</body>
+</html>

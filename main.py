@@ -5,15 +5,15 @@ app = Flask(__name__)
 app.secret_key = "secret_key"
 
 menu = [
-    {"name": "msemen kefta", "price": 620.00},
-    {"name": "chawarma", "price": 507.99},
-    {"name": "coucous royale", "price": 750.00},
-    {"name": "Futu-banane", "price": 890.99},
-    {"name": "street food indienne importé des rues de Mumbaï", "price": 0.50},
+    {"name": "msemen kefta", "price": 620.00, "description": "msemen avec kefta"},
+    {"name": "chawarma", "price": 507.99, "description": "chat avec warma"},
+    {"name": "couscous royale", "price": 750.00, "description": "coucous avec sauce royale"},
+    {"name": "Futu-banane", "price": 890.99, "description": "futu avec banane"},
+    {"name": "street food indienne importé des rues de Mumbaï", "price": 0.50, "description": "street food indienne 100% safe"},
 ]
 
 users = {}
-reservations = []
+reservations = {}
 orders = {}
 avis_list = []
 
@@ -28,6 +28,13 @@ def index():
 @app.route('/menu')
 def afficher_menu():
     return render_template('menu.html', menu=menu)
+
+@app.route('/plat/<plat_name>')
+def plat_detail(plat_name):
+    plat = next((p for p in menu if p["name"] == plat_name), None)
+    if plat:
+        return render_template('plat_detail.html', plat=plat)
+    return redirect(url_for('afficher_menu'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -58,14 +65,23 @@ def logout():
 
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
     if request.method == 'POST':
         nom = request.form['nom']
         date = request.form['date']
         heure = request.form['heure']
         personnes = request.form['personnes']
-        reservations.append({"nom": nom, "date": date, "heure": heure, "personnes": personnes})
+        reservation_id = len(reservation.get(username, [])) + 1
+        reservation = {"id": reservation_id, "nom": nom, "date": date, "heure": heure, "personnes": personnes}
+        
+        if username not in reservations:
+            reservations[username] = []
+        reservations[username].append(reservation)
         return redirect(url_for('index'))
     return render_template('reservation.html')
+
 
 @app.route('/commande', methods=['GET', 'POST'])
 def commande():

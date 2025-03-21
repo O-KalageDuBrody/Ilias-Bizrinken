@@ -9,8 +9,11 @@
     <h1>Notre Menu</h1>
     <ul>
         {% for plat in menu %}
-            <li>{{ plat.name }} - {{ plat.price }}€</li>
+        <li>
+            <a href="{{ url_for('plat_detail', plat_name=plat.name) }}">{{ plat.name }} - {{ plat.price }}€</a>
+        </li>
         {% endfor %}
     </ul>
+    <a href="/">Retour à l'accueil<a>
 </body>
 </html>
