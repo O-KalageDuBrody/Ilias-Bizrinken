@@ -1,5 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3
+
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
@@ -19,12 +25,32 @@ avis_list = []
 
 @app.route('/')
 def index():
+    conn = get_db_connection()
+
+    avis = conn.execute('SELECT * FROM avis').fetchall()
+
     if 'username' in session:
-        user = session['username']
-        user_orders = orders.get(user, [])
-        user_reservations = reservations.get(user, [])
-        return render_template('index.html', avis_list=avis_list, user=user, orders=user_orders, reservations=user_reservations)
-    return render_template('index.html', avis_list=avis_list, user=None)
+        username = session['username']
+        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+
+        user_id = user['id']
+
+        user_orders_raw = conn.execute('SELECT * FROM orders WHERE user_id = ?', (user_id,)).fetchall()
+        user_reservations = conn.execute('SELECT * FROM reservations WHERE user_id = ?', (user_id,)).fetchall()
+
+        user_orders = []
+        for order in user_orders_raw:
+            plats = conn.execute('SELECT plat_name FROM order_items WHERE order_id = ?', (order['id'],)).fetchall()
+            order_dict = dict(order)
+            order_dict['plats'] = [p['plat_name'] for p in plats]
+            user_orders.append(order_dict)
+
+        conn.close()
+        return render_template('index.html', avis_list=avis, user=username, orders=user_orders, reservations=user_reservations)
+
+    conn.close()
+    return render_template('index.html', avis_list=avis, user=None)
+
 
 @app.route('/menu')
 def afficher_menu():
@@ -41,12 +67,23 @@ def plat_detail(plat_name):
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        if username in users:
-            return "Ce nom d'utilisateur est déjà pris."
         password = generate_password_hash(request.form['password'])
-        users[username] = {"password": password, "orders": []}
+
+        conn = get_db_connection()
+        existing_user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+
+        if existing_user:
+            conn.close()
+            return render_template('register.html', error_message="Cette username est déjà pris.")
+
+        conn.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+        conn.commit()
+        conn.close()
+        
+
         session['username'] = username
         return redirect(url_for('index'))
+
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,10 +91,20 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if username in users and check_password_hash(users[username]['password'], password):
+
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        conn.close()
+
+        if user and check_password_hash(user['password'], password):
             session['username'] = username
             return redirect(url_for('index'))
+
+        error_message = "Username ou mot de passe incorrect."
+        return render_template('login.html', error_message=error_message)
+
     return render_template('login.html')
+
 
 @app.route('/logout')
 def logout():
@@ -68,50 +115,79 @@ def logout():
 def reservation():
     if 'username' not in session:
         return redirect(url_for('login'))
-    username = session['username']
+
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM users WHERE username = ?', (session['username'],)).fetchone()
+
     if request.method == 'POST':
         nom = request.form['nom']
         date = request.form['date']
         heure = request.form['heure']
         personnes = request.form['personnes']
-        reservation = {"nom": nom, "date": date, "heure": heure, "personnes": personnes}
-        
-        if username not in reservations:
-            reservations[username] = []
-        reservations[username].append(reservation)
+
+        conn.execute('INSERT INTO reservations (user_id, nom, date, heure, personnes) VALUES (?, ?, ?, ?, ?)',
+                     (user['id'], nom, date, heure, personnes))
+        conn.commit()
+        conn.close()
+
         return redirect(url_for('index'))
+
+    conn.close()
     return render_template('reservation.html')
+
 
 
 @app.route('/commande', methods=['GET', 'POST'])
 def commande():
     if 'username' not in session:
         return redirect(url_for('login'))
+
     username = session['username']
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+
     if request.method == 'POST':
         plats_selectionnes = request.form.getlist('plats')
-        total = sum([plat['price'] for plat in menu if plat['name'] in plats_selectionnes])
         adresse = request.form['adresse']
         telephone = request.form['telephone']
-        order_id = len(orders.get(username, [])) + 1
-        order = {"id": order_id, "plats": plats_selectionnes, "total": total, "adresse": adresse, "telephone": telephone}
-        
-        if username not in orders:
-            orders[username] = []
-        orders[username].append(order)
+
+        total = sum([plat['price'] for plat in menu if plat['name'] in plats_selectionnes])
+
+        cursor = conn.execute('INSERT INTO orders (user_id, total, adresse, telephone) VALUES (?, ?, ?, ?)',
+                              (user['id'], total, adresse, telephone))
+        order_id = cursor.lastrowid
+
+        for plat_name in plats_selectionnes:
+            conn.execute('INSERT INTO order_items (order_id, plat_name) VALUES (?, ?)', (order_id, plat_name))
+
+        conn.commit()
+        conn.close()
+
         return redirect(url_for('confirmation', order_id=order_id))
+
+    conn.close()
     return render_template('commande.html', menu=menu)
+
 
 @app.route('/confirmation/<int:order_id>')
 def confirmation(order_id):
     if 'username' not in session:
         return redirect(url_for('login'))
+
     username = session['username']
-    user_orders = orders.get(username, [])
-    order = next((o for o in user_orders if o["id"] == order_id), None)
+    conn = get_db_connection()
+
+    user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+    order = conn.execute('SELECT * FROM orders WHERE id = ? AND user_id = ?', (order_id, user['id'])).fetchone()
+    plats = conn.execute('SELECT plat_name FROM order_items WHERE order_id = ?', (order_id,)).fetchall()
+
+    conn.close()
+
     if order:
-        return render_template('confirmation.html', nom=username, order=order)
+        return render_template('confirmation.html', nom=username, order=order, plats=[p['plat_name'] for p in plats])
+
     return redirect(url_for('index'))
+
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -128,8 +204,14 @@ def ajouter_avis():
         nom = session['username']
     else:
         nom = "Anonyme"
+
     commentaire = request.form['commentaire']
-    avis_list.append({"nom": nom, "message": commentaire})
+
+    conn = get_db_connection()
+    conn.execute('INSERT INTO avis (nom, message) VALUES (?, ?)', (nom, commentaire))
+    conn.commit()
+    conn.close()
+
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

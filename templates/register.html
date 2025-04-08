@@ -4,14 +4,26 @@
     <meta charset="UTF-8">
     <title>Inscription</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <h1>Inscription</h1>
-    <form method="POST">
-        <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-        <input type="password" name="password" placeholder="Mot de passe" required>
-        <button type="submit">S'inscrire</button>
-    </form>
-    <p>Déjà un compte ? <a href="{{ url_for('login') }}">Connectez-vous</a></p>
+    <main>
+        <h1>Inscription</h1>
+        <form method="POST">
+            <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit">S'inscrire</button>
+        </form>
+        {% if error_message %}
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: '{{ error_message }}'
+            });
+        </script>
+        {% endif %}
+        <p>Déjà un compte ? <a href="{{ url_for('login') }}">Connectez-vous</a></p>
+    </main>
 </body>
 </html>

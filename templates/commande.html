@@ -13,7 +13,15 @@
         <input type="text" name="telephone" placeholder="Votre Téléphone" required>
         <h3>Choisissez vos plats :</h3>
         {% for plat in menu %}
-            <input type="checkbox" name="plats" value="{{ plat.name }}"> {{ plat.name }} - {{ plat.price }}€<br>
+        <div class="plat-option">
+            <label>
+                <input type="checkbox" name="plats" value="{{ plat.name }}">
+                <span class="plat-info">
+                    <strong>{{ plat.name }}</strong> - {{ plat.price }} €<br>
+                    <small>{{ plat.description }}</small>
+                </span>
+            </label>
+        </div>
         {% endfor %}
         <button type="submit">Commander</button>
     </form>

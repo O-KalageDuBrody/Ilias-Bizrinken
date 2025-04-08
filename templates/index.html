@@ -30,7 +30,7 @@
             {% if orders %}
                 <ul>
                     {% for order in orders %}
-                        <li><a href="confirmation/{{order.id}}">Commande: {{ order.plats }} - Total: {{ order.total }}€</a></li>
+                        <li> <a href="{{ url_for('confirmation', order_id=order.id) }}"> Commande : {% for plat in order.plats %} {{ plat }}{% if not loop.last %}, {% endif %} {% endfor %} — Total : {{ order.total }}€ </a> </li>
                     {% endfor %}
                 </ul>
             {% else %}
