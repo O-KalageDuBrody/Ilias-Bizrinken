@@ -3,7 +3,6 @@ import sqlite3
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
-# Table utilisateurs
 c.execute('''
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -12,7 +11,6 @@ CREATE TABLE IF NOT EXISTS users (
 )
 ''')
 
-# Table des réservations
 c.execute('''
 CREATE TABLE IF NOT EXISTS reservations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,7 +23,6 @@ CREATE TABLE IF NOT EXISTS reservations (
 )
 ''')
 
-# Table des commandes
 c.execute('''
 CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +34,6 @@ CREATE TABLE IF NOT EXISTS orders (
 )
 ''')
 
-# Plats de chaque commande
 c.execute('''
 CREATE TABLE IF NOT EXISTS order_items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +43,6 @@ CREATE TABLE IF NOT EXISTS order_items (
 )
 ''')
 
-# Table des avis
 c.execute('''
 CREATE TABLE IF NOT EXISTS avis (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
