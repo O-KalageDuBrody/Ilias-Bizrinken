@@ -27,11 +27,17 @@ avis_list = []
 def index():
     conn = get_db_connection()
 
-    avis = conn.execute('SELECT * FROM avis').fetchall()
+    avis = conn.execute('SELECT * FROM avis ORDER BY id DESC').fetchall()
 
     if 'username' in session:
         username = session['username']
         user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+
+        # Si l'utilisateur n'existe plus (DB reset), on déconnecte
+        if user is None:
+            session.pop('username', None)
+            conn.close()
+            return redirect(url_for('index'))
 
         user_id = user['id']
 
@@ -200,15 +206,24 @@ def contact():
 
 @app.route('/ajouter_avis', methods=['POST'])
 def ajouter_avis():
-    if 'username' in session:
+    nom_form = request.form.get('nom', '').strip()
+    commentaire = request.form['commentaire']
+
+    # Si l'utilisateur a écrit un nom, on l'utilise
+    if nom_form:
+        nom = nom_form
+    # Sinon, on prend le username de session s'il existe
+    elif 'username' in session:
         nom = session['username']
+    # Sinon, Anonyme
     else:
         nom = "Anonyme"
 
-    commentaire = request.form['commentaire']
-
     conn = get_db_connection()
-    conn.execute('INSERT INTO avis (nom, message) VALUES (?, ?)', (nom, commentaire))
+    conn.execute(
+        'INSERT INTO avis (nom, message) VALUES (?, ?)',
+        (nom, commentaire)
+    )
     conn.commit()
     conn.close()
 

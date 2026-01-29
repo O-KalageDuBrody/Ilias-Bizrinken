@@ -1,30 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
 
+:root {
+    --primary: #5b5fe9;
+    --secondary: #ff7a18;
+    --background: #f4f6fb;
+    --dark: #1e1e2e;
+    --light: #ffffff;
+    --soft-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Transition globale */
+* {
+    transition: all 0.25s ease-in-out;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #ff4500;
-    color: #fff;
+    background: var(--background);
+    color: var(--dark);
     text-align: center;
+    animation: pageFade 0.5s ease forwards;
+}
+
+@keyframes pageFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 header {
-    background-image: url('R.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: linear-gradient(135deg, var(--primary), #7f7cff);
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--soft-shadow);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .pp_logo {
     width: 75px;
     height: 75px;
-}
-
-a {
-    color: green;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255,255,255,0.4);
 }
 
 h1 {
@@ -32,8 +49,10 @@ h1 {
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing: 2px;
+    color: white;
 }
 
+/* NAVBAR */
 nav {
     margin-top: 10px;
 }
@@ -42,106 +61,189 @@ nav a {
     color: white;
     margin: 0 15px;
     text-decoration: none;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: bold;
-    transition: color 0.3s;
+    position: relative;
 }
 
-nav a:hover {
-    color: yellow;
+nav a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 3px;
+    left: 0;
+    bottom: -5px;
+    background-color: var(--secondary);
+    transition: width 0.3s ease;
 }
 
-nav a:visited {
-    color : yellow
+nav a:hover::after {
+    width: 100%;
 }
 
 main {
-    padding: 20px;
+    padding: 30px;
 }
 
+/* BOUTONS */
 button {
-    background-color: #ff4500;
+    background: linear-gradient(135deg, var(--primary), #7f7cff);
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 1.2em;
+    padding: 12px 25px;
+    font-size: 1.1em;
     cursor: pointer;
-    transition: transform 0.2s, background-color 0.3s;
-    border-radius: 5px;
+    border-radius: 30px;
+    box-shadow: var(--soft-shadow);
 }
 
 button:hover {
-    background-color: yellow;
-    color: #1e1e1e;
-    transform: scale(1.1);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, #7f7cff, var(--primary));
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* FORMULAIRES */
+form {
+    background-color: var(--light);
+    padding: 25px;
+    border-radius: 20px;
+    width: 50%;
+    margin: 20px auto;
+    box-shadow: var(--soft-shadow);
+    animation: fadeIn 0.8s ease;
 }
 
 input, textarea {
     width: 80%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
-    border: 2px solid #ff4500;
-    border-radius: 5px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
     font-size: 1em;
 }
 
-form {
-    background-color: #333;
-    padding: 20px;
-    border-radius: 10px;
-    width: 50%;
-    margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    animation: fadeIn 1s ease-in-out;
+input:focus, textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(91,95,233,0.4);
+    outline: none;
 }
 
+/* LISTES */
 ul {
     list-style: none;
     padding: 0;
 }
 
 li {
-    background-color: #444;
-    padding: 10px;
-    margin: 5px auto;
+    background-color: var(--light);
+    padding: 15px;
+    margin: 10px auto;
     width: 50%;
-    border-radius: 5px;
-    transition: transform 0.3s;
+    border-radius: 15px;
+    box-shadow: var(--soft-shadow);
 }
 
 li:hover {
-    transform: scale(1.05);
+    transform: translateY(-5px);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
+/* PLATS */
 .plat-option { 
     display: flex; 
-    align-items: flex-start; 
-    justify-content: flex-start; 
-    background-color: #444; 
-    margin: 10px auto; 
-    padding: 10px; 
-    border-radius: 5px; 
+    align-items: center; 
+    background-color: var(--light); 
+    margin: 15px auto; 
+    padding: 15px; 
+    border-radius: 15px; 
     width: 80%; 
-    color: white; 
-    text-align: left; 
+    box-shadow: var(--soft-shadow);
+}
+
+.plat-option:hover {
+    transform: scale(1.02);
 }
 
 .plat-option input[type="checkbox"] { 
     margin-right: 15px; 
-    transform: scale(1.3); 
-    margin-top: 4px; 
+    transform: scale(1.5); 
+    accent-color: var(--primary);
 }
 
 .plat-info { 
     display: flex; 
     flex-direction: column; 
+}
+
+/* LIENS */
+a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    color: var(--secondary);
+}
+
+/* FADE */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+/* H1 des pages autres que l’index */
+body h1 {
+    color: var(--dark);
+}
+
+/* Organisation verticale des formulaires */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Champs de saisie */
+form input,
+form textarea {
+    width: 80%;
+}
+
+/* Bouton submit en dessous et centré */
+form button,
+form input[type="submit"] {
+    margin-top: 20px;
+    align-self: center;
+    width: auto;
+    min-width: 200px;
+}
+
+/* DARK MODE */
+body.dark {
+    --background: #121212;
+    --dark: #ffffff;
+    --light: #1e1e1e;
+    --primary: #8a8dff;
+    --secondary: #ff9f43;
+}
+
+#darkModeToggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2em;
+    padding: 10px 12px;
+    cursor: pointer;
+    color: white;
+}
+
+#darkModeToggle:hover {
+    transform: scale(1.1);
 }

@@ -4,8 +4,28 @@
     <meta charset="UTF-8">
     <title>Menu - La Casse-Crouterie</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="/static/transition.js"></script>
+    <script src="/static/darkmode.js"></script>
+
 </head>
 <body>
+    <header>
+        <h1 class="logo"><img class="pp_logo" src="{{ url_for('static', filename='logo.jpeg') }}" alt="Logo"> Bienvenue à La Casse-Crouterie</h1>
+        <nav>
+            <a href="/">Accueil</a>
+            <a href="/menu">Le Menu</a>
+            <a href="/reservation">Réservation</a>
+            <a href="/commande">Commande</a>
+            <a href="/contact">Contact</a>
+            {% if user %}
+                <a href="/logout">Déconnexion</a>
+            {% else %}
+                <a href="/login">Connexion</a>
+                <a href="/register">Inscription</a>
+            {% endif %}
+        </nav>
+        <button id="darkModeToggle">🌙</button>
+    </header>
     <h1>Notre Menu</h1>
     <ul>
         {% for plat in menu %}

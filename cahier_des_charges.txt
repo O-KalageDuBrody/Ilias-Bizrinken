@@ -1,4 +1,0 @@
-HAOUAS Idris, GUERNALEC Waroc et BAKAL Maxime
-Cahier des charges :
-
-Faire une base de données qui stock les identifiants et mots de passes des comptes, les avis les réservations et l’historique des commandes des clients.

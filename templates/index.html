@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil - La Casse-Crouterie</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="/static/transition.js"></script>
+    <script src="/static/darkmode.js"></script>
+
 </head>
 <body>
     <header>
-        <h1 class="logo"><img class='pp_logo' src='static/logo.jpg'>Bienvenue à La Casse-Crouterie</h1>
+        <h1 class="logo"><img class="pp_logo" src="{{ url_for('static', filename='logo.jpeg') }}" alt="Logo"> Bienvenue à La Casse-Crouterie</h1>
         <nav>
             <a href="/">Accueil</a>
             <a href="/menu">Le Menu</a>
@@ -22,6 +25,7 @@
                 <a href="/register">Inscription</a>
             {% endif %}
         </nav>
+        <button id="darkModeToggle">🌙</button>
     </header>
     <main>
         {% if user %}
